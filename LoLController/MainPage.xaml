@@ -1,0 +1,339 @@
+﻿<Page
+    x:Class="LoLController.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LoLController"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:ui="using:Microsoft.Toolkit.Uwp.UI"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="7.5*" />
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Menu for selecting the controller-->
+        <Grid Grid.Column="0" Grid.Row="0" Margin="50, 0, 50, 0">
+            <TextBlock Text="Selected Device" FontWeight="ExtraBold" FontSize="18" Margin="0, 15, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            
+            <Button x:Name="ControllerSelectorLeftButton" Content="←" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ControllerSelectionLeft" IsTabStop="False"/>
+            <Button x:Name="ControllerSelectorRightButton" Content="→" HorizontalAlignment="Right" VerticalAlignment="Center" Click="ControllerSelectionRight" IsTabStop="False"/>
+            <TextBlock x:Name="SelectedControllerLabel" Text="--Disconnected--" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!--Container for the display related stuff-->
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="50, 10, 50, 25">
+            <!--Display method selector-->
+
+            <TextBlock Text="Display Mode" FontWeight="ExtraBold" FontSize="18" Margin="0, 0, 0, 15" VerticalAlignment="Top"/>
+            <ComboBox x:Name="ControllerStateDisplayModeSelector" Text="Aboba" SelectedIndex="0" SelectionChanged="DisplayMethodChanged" IsTabStop="False" Margin="0, 0, 0, 15">
+                <ComboBoxItem Content="Default"/>
+                <ComboBoxItem Content="Dualshock 4"/>
+            </ComboBox>
+
+            <!--Container for all the display methods-->
+            <Grid x:Name="DisplayHolder">
+                <!--Default display method-->
+                <StackPanel x:Name="GenericControllerState" Margin="0, 10, 0, 20">
+                    <TextBlock FontSize="18" Text="Buttons" FontWeight="ExtraBold"/>
+                    <controls:WrapPanel x:Name="ButtonsStackPanel" Orientation="Horizontal"/>
+
+                    <TextBlock FontSize="18" Text="Switches" FontWeight="ExtraBold"/>
+                    <controls:WrapPanel x:Name="SwitchesStackPanel" Orientation="Horizontal"/>
+
+                    <TextBlock FontSize="18" Text="Axis" FontWeight="ExtraBold"/>
+                    <controls:WrapPanel x:Name="AxisStackPanel" Orientation="Horizontal"/>
+                </StackPanel>
+
+                <!--Dualshock 4 display method-->
+                <StackPanel x:Name="Dualshock4ControllerState" Margin="0, 10, 0, 20">
+                    <TextBlock Text="Buttons" FontSize="18" FontWeight="ExtraBold"/>
+                    <Grid Margin="-5, 10, 10, 0">
+                        <Grid.Resources >
+                            <Style TargetType="TextBlock" >
+                                <Setter Property="Margin" Value="0,5,0,5" />
+                            </Style>
+                        </Grid.Resources>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="□:" Grid.Row="0" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="×:" Grid.Row="0" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="○:" Grid.Row="0" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="△:" Grid.Row="0" Grid.Column="6" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="L1:" Grid.Row="1" Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="R1:" Grid.Row="1" Grid.Column="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="L2:" Grid.Row="1" Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="R2:" Grid.Row="1" Grid.Column="6" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="SHARE:" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="OPTIONS:" Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Left stick click:" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Right stick click:" Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Middle button:" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Touch pad press:" Grid.Row="5" Grid.Column="4" Grid.ColumnSpan="2" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+                        <TextBlock x:Name="DS4_Square" HorizontalAlignment="Center" Text="False" Grid.Row="0" Grid.Column="1"/>
+                        <TextBlock x:Name="DS4_Cross" HorizontalAlignment="Center" Text="False" Grid.Row="0" Grid.Column="3"/>
+                        <TextBlock x:Name="DS4_Circle" HorizontalAlignment="Center" Text="False" Grid.Row="0" Grid.Column="5"/>
+                        <TextBlock x:Name="DS4_Triangle" HorizontalAlignment="Center" Text="False" Grid.Row="0" Grid.Column="7"/>
+
+                        <TextBlock x:Name="DS4_L1" HorizontalAlignment="Center" Text="False" Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock x:Name="DS4_R1" HorizontalAlignment="Center" Text="False" Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock x:Name="DS4_L2" HorizontalAlignment="Center" Text="False" Grid.Row="1" Grid.Column="5"/>
+                        <TextBlock x:Name="DS4_R2" HorizontalAlignment="Center" Text="False" Grid.Row="1" Grid.Column="7"/>
+
+                        <TextBlock x:Name="DS4_SHARE" HorizontalAlignment="Center" Text="False" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <TextBlock x:Name="DS4_OPTIONS" HorizontalAlignment="Center" Text="False" Grid.Row="3" Grid.Column="6" Grid.ColumnSpan="2"/>
+                        <TextBlock x:Name="DS4_LeftStickClick" HorizontalAlignment="Center" Text="False" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <TextBlock x:Name="DS4_RightStickClick" HorizontalAlignment="Center" Text="False" Grid.Row="4" Grid.Column="6" Grid.ColumnSpan="2"/>
+
+                        <TextBlock x:Name="DS4_MiddleButton" HorizontalAlignment="Center" Text="False" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <TextBlock x:Name="DS4_TouchpadPress" HorizontalAlignment="Center" Text="False" Grid.Row="5" Grid.Column="6" Grid.ColumnSpan="2"/>
+                    </Grid>
+
+                    <Grid Margin="0, 10, 10, 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontSize="18" Text="D-Pad:" FontWeight="ExtraBold" Grid.Column="0"/>
+                        <TextBlock x:Name="DS4_DPadDirection" Text="Center" VerticalAlignment="Center" Grid.Column="1" Margin="15, 0, 0, 0"/>
+                    </Grid>
+
+                    <TextBlock FontSize="18" Text="Axis" FontWeight="ExtraBold"/>
+                    <Grid Margin="10, 5, 10, 10">
+                        <Grid.Resources >
+                            <Style TargetType="TextBlock" >
+                                <Setter Property="Margin" Value="0,3,0,3" />
+                            </Style>
+                        </Grid.Resources>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Left stick X:" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="Left stick Y:" FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
+                        <TextBlock Text="Right stick X:" FontWeight="Bold" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="Right stick Y:" FontWeight="Bold" Grid.Row="1" Grid.Column="2"/>
+                        <TextBlock Text="L2:" FontWeight="Bold" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="R2:" FontWeight="Bold" Grid.Row="2" Grid.Column="2"/>
+
+                        <TextBlock x:Name="DS4_LeftStickX" Text="0.5" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="DS4_LeftStickY" Text="0.5" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="DS4_RightStickX" Text="0.5" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="DS4_RightStickY" Text="0.5" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="DS4_L2Weight" Text="0.5" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="DS4_R2Weight" Text="0.5" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+
+        <!--League status display-->
+        <Grid Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="League of Legends status:" Grid.Column="0" HorizontalAlignment="Center" FontSize="20" Margin="15" FontWeight="Bold"/>
+            <TextBlock x:Name="LeagueOfLegendsStatusLabel" Text="N/A" Grid.Column="1" HorizontalAlignment="Left" FontSize="20" Margin="15" FontWeight="Bold"/>
+        </Grid>
+
+        
+        <!--Binds-->
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
+            <TextBlock Text="Binds and Config" FontSize="18" FontWeight="ExtraBold" HorizontalAlignment="Left" Margin="0, 15, 30, 30"/>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources >
+                    <Style TargetType="TextBox" >
+                        <Setter Property="Margin" Value="0,10,0,25" />
+                        <Setter Property="Width" Value="80%" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                    </Style>
+                </Grid.Resources>
+
+                <TextBlock Text="Right Stick Sensitivity" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                <TextBlock Text="Right Stick Map Viewing Sensitivity" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"/>
+
+                <TextBlock Text="Shop" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="Base" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="Stop" Grid.Row="2" Grid.Column="2"/>
+                <TextBlock Text="Attack Champions Only" Grid.Row="2" Grid.Column="3"/>
+
+                <TextBlock Text="Summoner Spell 1" Grid.Row="4" Grid.Column="0"/>
+                <TextBlock Text="Summoner Spell 2" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="Lock Camera" Grid.Row="4" Grid.Column="2"/>
+                <TextBlock Text="Attack Move" Grid.Row="4" Grid.Column="3"/>
+
+                <TextBlock Text="Q Ability" Grid.Row="6" Grid.Column="0"/>
+                <TextBlock Text="W Ability" Grid.Row="6" Grid.Column="1"/>
+                <TextBlock Text="E Ability" Grid.Row="6" Grid.Column="2"/>
+                <TextBlock Text="R Ability" Grid.Row="6" Grid.Column="3"/>
+
+                <TextBlock Text="Tab" Grid.Row="8" Grid.Column="0"/>
+                <TextBlock Text="Emote Wheel" Grid.Row="8" Grid.Column="1"/>
+                <TextBlock Text="Pings" Grid.Row="8" Grid.Column="2"/>
+                <TextBlock Text="Dance" Grid.Row="8" Grid.Column="3"/>
+
+
+
+
+
+                <TextBox x:Name="RightStickSensitivity" ui:TextBoxExtensions.Mask="99" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" KeyDown="AlterValue"/>
+                <TextBox x:Name="RightStickMapSensitivity" ui:TextBoxExtensions.Mask="99" Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" KeyDown="AlterValue"/>
+
+                <TextBox x:Name="ShopBind" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="BaseBind" Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="StopBind" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="AttackChampionsOnlyBind" Grid.Row="3" Grid.Column="3" VerticalAlignment="Top" KeyDown="BindAltered"/>
+
+                <TextBox x:Name="SummonerSpell1Bind" Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="SummonerSpell2Bind" Grid.Row="5" Grid.Column="1" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="LockCameraBind" Grid.Row="5" Grid.Column="2" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="AttackMoveBind" Grid.Row="5" Grid.Column="3" VerticalAlignment="Top" KeyDown="BindAltered"/>
+
+                <TextBox x:Name="QAbilityBind" Grid.Row="7" Grid.Column="0" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="WAbilityBind" Grid.Row="7" Grid.Column="1" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="EAbilityBind" Grid.Row="7" Grid.Column="2" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="RAbilityBind" Grid.Row="7" Grid.Column="3" VerticalAlignment="Top" KeyDown="BindAltered"/>
+
+                <TextBox x:Name="TabBind" Grid.Row="9" Grid.Column="0" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="EmoteWheelBind" Grid.Row="9" Grid.Column="1" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="PingsBind" Grid.Row="9" Grid.Column="2" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="DanceBind" Grid.Row="9" Grid.Column="3" VerticalAlignment="Top" KeyDown="BindAltered"/>
+            </Grid>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+
+                <Grid.Resources >
+                    <Style TargetType="TextBox" >
+                        <Setter Property="Margin" Value="0,10,0,10" />
+                        <Setter Property="Width" Value="80%" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                    </Style>
+                </Grid.Resources>
+
+                <TextBlock Text="Item 1" Grid.Row="0" Grid.Column="0"/>
+                <TextBlock Text="Item 2" Grid.Row="0" Grid.Column="1"/>
+                <TextBlock Text="Item 3" Grid.Row="0" Grid.Column="2"/>
+                <TextBlock Text="Item 4" Grid.Row="0" Grid.Column="3"/>
+                <TextBlock Text="Item 5" Grid.Row="0" Grid.Column="4"/>
+                <TextBlock Text="Item 6" Grid.Row="0" Grid.Column="5"/>
+                <TextBlock Text="Item 7" Grid.Row="0" Grid.Column="6"/>
+
+                <TextBox x:Name="Item1Bind" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item2Bind" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item3Bind" Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item4Bind" Grid.Row="1" Grid.Column="3" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item5Bind" Grid.Row="1" Grid.Column="4" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item6Bind" Grid.Row="1" Grid.Column="5" VerticalAlignment="Top" KeyDown="BindAltered"/>
+                <TextBox x:Name="Item7Bind" Grid.Row="1" Grid.Column="6" VerticalAlignment="Top" KeyDown="BindAltered"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="ConfigSaveButton" Content="Save" Margin="20" Click="SaveConfig"/>
+                <Button x:Name="ConfigLoadButton" Content="Load" Margin="20" Click="LoadConfig"/>
+                <Button x:Name="ConfigResetButton" Content="Reset" Margin="20" Click="ResetConfig"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Column="0" Grid.Row="2" Margin="50, 0, 0, 0" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            
+            
+            <StackPanel Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" Margin="0, 0, 30, 0">
+                <TextBlock Text="Selected Player" FontWeight="ExtraBold" FontSize="18" VerticalAlignment="Top"/>
+                <ComboBox x:Name="SelectedPlayerComboBox" Text="Aboba" SelectedIndex="0" SelectionChanged="PlayerChanged" IsTabStop="False" Margin="0, 15, 10, 10" VerticalAlignment="Top">
+                    <ComboBoxItem Content="Disabled"/>
+                    <ComboBoxItem Content="Dualshock 4 (Default)"/>
+                </ComboBox>
+            </StackPanel>
+
+            <ScrollViewer x:Name="PlayerDescriptionHolder" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto" Margin="0, 10, 10, 20">
+                <TextBlock x:Name="PlayerDescription" Text="" TextWrapping="WrapWholeWords" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0, 0, 15, 0"/>
+            </ScrollViewer>
+
+        </Grid>
+
+
+    </Grid>
+</Page>
